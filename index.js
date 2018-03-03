@@ -12,7 +12,7 @@ const bot = new Discord.Client({disableEveryone: true});
 bot.on("ready", () => {
   console.log(`${bot.user.username} is online!`);
 
-  bot.user.setActivity("some random carpet", {type: "Eating"});
+  bot.user.setActivity("all you sleep", {type: "WATCHING"});
 });
 
 bot.on("message",message => {
@@ -23,6 +23,29 @@ bot.on("message",message => {
   let messageArray = message.content.split(" ");
   let cmd = messageArray[0];
   let args = messageArray.slice(1);
+
+  if(cmd === `${prefix}report`) {
+
+    let ourUser= message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    if(!ourUser) return message.channel.send("Couldn't find user.");
+    let reason = args.join(" ").slice(22);
+
+    let reportEmbed = new Discord.RichEmbed()
+    .setDescription("Reports")
+    .setColor('#15f153')
+    .addField("Reported User", `${ourUser} with ID: ${ourUser.id}`)
+    .addField("Reported By", `${message.author} with ID: ${message.author.id}`)
+    .addField("Channel", message.channel)
+    .addField("Time", message.createdAt)
+    .addField("Reason", reason)
+
+    let reportschannel = message.guild.channels.find(`name`, "reports");
+    if(!reportschannel) return message.channel.send("Couldn't find reports channel.")
+
+    message.delete().catch(O_o => {});
+    reportschannel.send(reportEmbed);
+    return;
+  }
 
   if(cmd === `${prefix}serverinfo`){
     let sicon = message.guild.iconURL;
