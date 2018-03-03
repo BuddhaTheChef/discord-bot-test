@@ -1,10 +1,30 @@
-const Discord = require('discord.js');
-const bot = new Discord.Client();
+const botconfig = require("./botconfig.json");
+const Discord = require("discord.js");
 
-bot.on('message', (message) => {
-  if(message.content == 'Uki') {
-    message.channel.sendMessage('What may I help you with?');
+// const commando = require('discord.js-commando');
+
+const bot = new Discord.Client({disableEveryone: true});
+
+// bot.registry.registerGroup('random', 'Random');
+// bot.registry.registerDefaults();
+// bot.registry.registerCommandsIn(__dirname + "/commands");
+
+bot.on("ready", () => {
+  console.log(`${bot.user.username} is online!`);
+});
+
+bot.on("message",message => {
+  if(message.author.bot) return;
+  if(message.channel.type === "dm") return;
+
+  let prefix = botconfig.prefix;
+  let messageArray = message.content.split(" ");
+  let cmd = messageArray[0];
+  let args = messageArray.slice(1);
+
+  if(cmd === `${prefix}hello`) {
+    return message.channel.send("Hello!");
   }
 });
 
-bot.login('NDE4OTEwMzQ5MDQ4MjgzMTQ2.DXocMw.VnaID5t5wjf90jDhdW1VZO1i82I');
+bot.login(botconfig.token);
