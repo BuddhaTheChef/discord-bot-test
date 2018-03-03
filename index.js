@@ -11,6 +11,8 @@ const bot = new Discord.Client({disableEveryone: true});
 
 bot.on("ready", () => {
   console.log(`${bot.user.username} is online!`);
+
+  bot.user.setActivity("some random carpet", {type: "Eating"});
 });
 
 bot.on("message",message => {
