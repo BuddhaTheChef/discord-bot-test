@@ -1,13 +1,7 @@
 const botconfig = require("./botconfig.json");
 const Discord = require("discord.js");
 
-// const commando = require('discord.js-commando');
-
 const bot = new Discord.Client({disableEveryone: true});
-
-// bot.registry.registerGroup('random', 'Random');
-// bot.registry.registerDefaults();
-// bot.registry.registerCommandsIn(__dirname + "/commands");
 
 bot.on("ready", () => {
   console.log(`${bot.user.username} is online!`);
@@ -24,9 +18,60 @@ bot.on("message",message => {
   let cmd = messageArray[0];
   let args = messageArray.slice(1);
 
+if(cmd === `${prefix}kick`) {
+  let kUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    if(!kUser) return message.channel.send("Couldn't find user.");
+    let kReason = args.join(" ").slice(22);
+    if(!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send('No can do Pal!')
+    if(kUser.hasPermission("MANAGE_MESSAGES")) return message.channel.send("That person cant be kicked! XP")
+
+    let kickEmbed = new Discord.RichEmbed()
+    .setDescription("~Kick~")
+    .setColor('#ff0000')
+    .addField("Kicked User", `${kUser} with ID: ${kUser.id}`)
+    .addField("Kicked By", `<@${message.author.id}> With ID: ${message.author.id}`)
+    .addField("Kicked In", message.channel)
+    .addField("Time", message.createdAt)
+    .addField("Reason", kReason)
+
+    let kickChannel = message.guild.channels.find(`name`, "incidents");
+    if(!kickChannel) return message.channel.send("Couldn't find incidents channel.")
+
+    message.guild.member(kUser).kick(kReason);
+    kickChannel.send(kickEmbed);
+
+  return;
+}
+
+  if(cmd === `${prefix}ban`) {
+    let bUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+      if(!bUser) return message.channel.send("Couldn't find user.");
+      let bReason = args.join(" ").slice(22);
+      if(!message.member.hasPermission("MANAGE_MEMBERS")) return message.channel.send('No can do Pal!')
+      if(bUser.hasPermission("MANAGE_MESSAGES")) return message.channel.send("That person cant be kicked! XP")
+
+      let banEmbed = new Discord.RichEmbed()
+      .setDescription("~Ban~")
+      .setColor('#ccff00')
+      .addField("Banned User", `${bUser} with ID: ${bUser.id}`)
+      .addField("Banned By", `<@${message.author.id}> With ID: ${message.author.id}`)
+      .addField("Banned In", message.channel)
+      .addField("Time", message.createdAt)
+      .addField("Reason", bReason)
+
+      let bannedChannel = message.guild.channels.find(`name`, "incidents");
+      if(!bannedChannel) return message.channel.send("Couldn't find incidents channel.");
+
+      message.guild.member(bUser).ban(bReason);
+      bannedChannel.send(banEmbed);
+
+      rerturn;
+
+  }
+
   if(cmd === `${prefix}report`) {
 
-    let ourUser= message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
+    let ourUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]));
     if(!ourUser) return message.channel.send("Couldn't find user.");
     let reason = args.join(" ").slice(22);
 
