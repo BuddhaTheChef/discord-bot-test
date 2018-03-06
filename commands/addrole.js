@@ -10,7 +10,7 @@ module.exports.run = (bot, message, args) => {
   if(!gRole) return message.reply("Couldn't find that role.");
 
   if(rMember.roles.has(gRole.id));
-  await(rMember.addRole(gRole.id));
+  (rMember.addRole(gRole.id));
 
   try{
     rMember.send(`Congrats, you have been given the role ${gRole.name}`)
