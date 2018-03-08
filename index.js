@@ -28,6 +28,35 @@ bot.on("ready", () => {
   bot.user.setActivity("all you sleep", {type: "WATCHING"});
 });
 
+bot.on("guildMemberAdd", member => {
+  console.log(`${member.id} joined the server.`);
+
+  let welcomechannel = member.guild.channels.find(`name`, "welcome_leave");
+  welcomechannel.send(`LOOK AT THIS GUY! ${member} has joined the party!`);
+});
+
+bot.on("guildMemberRemove", member => {
+  console.log(`${member.id} left the server.`);
+
+  let welcomechannel = member.guild.channels.find(`name`, "welcome_leave");
+  welcomechannel.send(`SEE YA NERD! ${member} has bailed on the server!`);
+});
+
+bot.on("channelCreate", channel => {
+  console.log(`${channel.name} has been created.`);
+
+  let sChannel = channel.guild.channels.find(`name`, "general");
+  sChannel.send(`${channel} has been created`);
+});
+
+bot.on("channelDelete", channel => {
+  console.log(`${channel.name} has been deleted.`);
+
+  let sChannel = channel.guild.channels.find(`name`, "general");
+  sChannel.send(`${channel.name} has been deleted`);
+});
+
+
 bot.on("message",message => {
   if(message.author.bot) return;
   if(message.channel.type === "dm") return;
